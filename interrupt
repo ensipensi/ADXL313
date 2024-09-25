@@ -1,0 +1,210 @@
+Por si falla
+/*^***********************************************PRUEBA CON LA LIBRERIA DE ARDUINO^************************************************/
+STATUS_ADXL Set_Register_Bit(SPI_HandleTypeDef *spi, uint8_t address, uint8_t bit_pos, uint8_t state)
+{
+	STATUS_ADXL ret_val = STATUS_OK_ADXL;
+	uint8_t byte;
+	if (Read_Byte(spi, address, &byte))
+	{
+		ret_val = ERR_READING;
+	}
+	if (state)
+	{
+		byte |= (1 << bit_pos);
+	}
+	else
+	{
+		byte &= ~(1 << bit_pos);
+	}
+	Register_Write(spi, address, byte);
+	return ret_val;
+}
+
+STATUS_ADXL Set_Activity_x(SPI_HandleTypeDef *spi, bool state)
+{
+	STATUS_ADXL ret_val = STATUS_OK_ADXL;
+	Set_Register_Bit(spi, ACT_INACT_CNT, BIT6, state);
+	return ret_val;
+}
+
+STATUS_ADXL Set_Activity_y(SPI_HandleTypeDef *spi, bool state)
+{
+	STATUS_ADXL ret_val = STATUS_OK_ADXL;
+	Set_Register_Bit(spi, ACT_INACT_CNT, BIT5, state);
+	return ret_val;
+}
+
+STATUS_ADXL Set_Activity_z(SPI_HandleTypeDef *spi, bool state)
+{
+	STATUS_ADXL ret_val = STATUS_OK_ADXL;
+	Set_Register_Bit(spi, ACT_INACT_CNT, BIT4, state);
+	return ret_val;
+}
+
+STATUS_ADXL Set_Activity_XYZ(SPI_HandleTypeDef *spi, bool x, bool y, bool z)
+{
+	STATUS_ADXL ret_val = STATUS_OK_ADXL;
+	Set_Activity_x(spi, x);
+	Set_Activity_y(spi, y);
+	Set_Activity_z(spi, z);
+	return ret_val;
+}
+
+STATUS_ADXL Set_Inactivity_x(SPI_HandleTypeDef *spi, bool state)
+{
+	STATUS_ADXL ret_val = STATUS_OK_ADXL;
+	Set_Register_Bit(spi, ACT_INACT_CNT, BIT2, state);
+	return ret_val;
+}
+
+STATUS_ADXL Set_Inactivity_y(SPI_HandleTypeDef *spi, bool state)
+{
+	STATUS_ADXL ret_val = STATUS_OK_ADXL;
+	Set_Register_Bit(spi, ACT_INACT_CNT, BIT1, state);
+	return ret_val;
+}
+
+STATUS_ADXL Set_Inactivity_z(SPI_HandleTypeDef *spi, bool state)
+{
+	STATUS_ADXL ret_val = STATUS_OK_ADXL;
+	Set_Register_Bit(spi, ACT_INACT_CNT, BIT0, state);
+	return ret_val;
+}
+
+STATUS_ADXL Set_Inactivity_XYZ(SPI_HandleTypeDef *spi, bool x, bool y, bool z)
+{
+	STATUS_ADXL ret_val = STATUS_OK_ADXL;
+	Set_Inactivity_x(spi, x);
+	Set_Inactivity_y(spi, y);
+	Set_Inactivity_z(spi, z);
+	return ret_val;
+}
+
+STATUS_ADXL Set_Activity(SPI_HandleTypeDef *spi, bool state)
+{
+	STATUS_ADXL ret_val = STATUS_OK_ADXL;
+	Set_Register_Bit(spi, ACT_INACT_CNT, BIT7, state);
+	return ret_val;
+}
+
+STATUS_ADXL Set_Inactivity(SPI_HandleTypeDef *spi, bool state)
+{
+	STATUS_ADXL ret_val = STATUS_OK_ADXL;
+	Set_Register_Bit(spi, ACT_INACT_CNT, BIT3, state);
+	return ret_val;
+}
+
+STATUS_ADXL Set_Measure_ON(SPI_HandleTypeDef *spi)
+{
+	STATUS_ADXL ret_val = STATUS_OK_ADXL;
+	Set_Register_Bit(spi, PWR_CNTRL, BIT3, true);
+	return ret_val;
+}
+
+STATUS_ADXL Set_Standby(SPI_HandleTypeDef *spi)
+{
+	STATUS_ADXL ret_val = STATUS_OK_ADXL;
+	Set_Register_Bit(spi, PWR_CNTRL, BIT3, false);
+	return ret_val;
+}
+
+STATUS_ADXL Set_Autosleep_ON(SPI_HandleTypeDef *spi)
+{
+	STATUS_ADXL ret_val = STATUS_OK_ADXL;
+	Set_Register_Bit(spi, PWR_CNTRL, BIT5, true);
+	Set_Register_Bit(spi, PWR_CNTRL, BIT4, true);
+	return ret_val;
+}
+
+STATUS_ADXL Set_Autosleep_OFF(SPI_HandleTypeDef *spi)
+{
+	STATUS_ADXL ret_val = STATUS_OK_ADXL;
+	Set_Register_Bit(spi, PWR_CNTRL, BIT5, false);
+	Set_Register_Bit(spi, PWR_CNTRL, BIT4, false);
+	return ret_val;
+}
+
+STATUS_ADXL Set_Interrupt(SPI_HandleTypeDef *spi, uint8_t interrupt_bit, uint8_t state)
+{
+	STATUS_ADXL ret_val = STATUS_OK_ADXL;
+	Set_Register_Bit(spi, INTERRUPT_ENABLE, interrupt_bit, state);
+	return ret_val;
+}
+
+STATUS_ADXL Set_Activity_Int(SPI_HandleTypeDef *spi, bool status)
+{
+	STATUS_ADXL ret_val = STATUS_OK_ADXL;
+	if (status)
+	{
+		Set_Interrupt(spi, BIT4, 1);
+	}
+	else
+	{
+		Set_Interrupt(spi, BIT4, 0);
+	}
+	return ret_val;
+}
+
+STATUS_ADXL Set_Inactivity_Int(SPI_HandleTypeDef *spi, bool status)
+{
+	STATUS_ADXL ret_val = STATUS_OK_ADXL;
+	if (status)
+	{
+		Set_Interrupt(spi, BIT3, 1);
+	}
+	else
+	{
+		Set_Interrupt(spi, BIT3, 0);
+	}
+	return ret_val;
+}
+
+STATUS_ADXL Set_Data_Ready_Int(SPI_HandleTypeDef *spi, bool status)
+{
+	STATUS_ADXL ret_val = STATUS_OK_ADXL;
+	if (status)
+	{
+		Set_Interrupt(spi, BIT7, 1);
+	}
+	else
+	{
+		Set_Interrupt(spi, BIT7, 0);
+	}
+	return ret_val;
+}
+
+STATUS_ADXL Set_Watermark_Int(SPI_HandleTypeDef *spi, bool status)
+{
+	STATUS_ADXL ret_val = STATUS_OK_ADXL;
+	if (status)
+	{
+		Set_Interrupt(spi, BIT1, 1);
+	}
+	else
+	{
+		Set_Interrupt(spi, BIT1, 0);
+	}
+	return ret_val;
+}
+
+STATUS_ADXL Set_Overrun_Int(SPI_HandleTypeDef *spi, bool status)
+{
+	STATUS_ADXL ret_val = STATUS_OK_ADXL;
+	if (status)
+	{
+		Set_Interrupt(spi, BIT0, 1);
+	}
+	else
+	{
+		Set_Interrupt(spi, BIT0, 0);
+	}
+	return ret_val;
+}
+
+STATUS_ADXL Set_Interrupt_Mapping(SPI_HandleTypeDef *spi, uint8_t interrupt_bit, bool interrupt_pin)
+{
+
+	STATUS_ADXL ret_val = STATUS_OK_ADXL;
+	Set_Register_Bit(spi, INTERRUPT_MAP, interrupt_bit, interrupt_pin);
+	return ret_val;
+}
